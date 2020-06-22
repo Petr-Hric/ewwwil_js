@@ -54,7 +54,7 @@ class InteractionHandler {
 
     activeTouchIndex(touchId) {
         for (var i = 0; i < this._activeTouchList.length; ++i) {
-            if (this._activeTouchList[i]._touchId == touchId) {
+            if (this._activeTouchList[i]._touchId === touchId) {
                 return i;
             }
         }
@@ -81,7 +81,7 @@ class InteractionHandler {
 
         for (var o = 0; o < this._ihObserverList.length; ++o) {
             if (this._ihObserverList[o]._id
-                == this._activeTouchList[this._activeTouchList.length - 1]._target.id) {
+                === this._activeTouchList[this._activeTouchList.length - 1]._target.id) {
                 this._activeTouchList[this._activeTouchList.length - 1]._atObserverList.push(
                     this._ihObserverList[o]._ihObserver.getThis);
             }
@@ -107,7 +107,7 @@ class InteractionHandler {
 
         evt.preventDefault();
 
-        if ("mousedown" == evt.type) {
+        if ("mousedown" === evt.type) {
             this.insertTouch(99, evt.pageX, evt.pageY, evt.target);
         } else {
             for (var i = 0; i < evt.changedTouches.length; ++i) {
@@ -125,7 +125,7 @@ class InteractionHandler {
 
         evt.preventDefault();
 
-        if ("mouseup" == evt.type) {
+        if ("mouseup" === evt.type) {
             this.removeTouch(99);
         } else {
             for (var i = 0; i < evt.changedTouches.length; ++i) {
@@ -141,13 +141,13 @@ class InteractionHandler {
     }
 
     handleMove(evt) {
-        if (this._activeTouchList.length == 0) {
+        if (this._activeTouchList.length === 0) {
             return;
         }
 
         this.DEBUG("[handleMove]: " + evt.type);
 
-        if (evt.type == "mousemove") {
+        if (evt.type === "mousemove") {
             var index = this.activeTouchIndex(99);
             if (index >= 0) {
                 this._activeTouchList[index]._x = evt.pageX;
@@ -178,7 +178,7 @@ class InteractionHandler {
         this.DEBUG("[registerObserver]: " + target.id);
 
         var index = this.observerIndex(target);
-        if (-1 == index) {
+        if (-1 === index) {
             this._ihObserverList.push({ _id: target.id, _ihObserver: observer.getThis });
         } else {
             this.ERROR("Observer already registered");
@@ -200,7 +200,7 @@ class InteractionHandler {
         this.DEBUG("[observerIndex]: " + target.id);
 
         for (var i = 0; i < this._ihObserverList.length; ++i) {
-            if (this._ihObserverList[i]._id == target.id) {
+            if (this._ihObserverList[i]._id === target.id) {
                 return i;
             }
         }

@@ -17,7 +17,7 @@ class Joystick {
 
     constructor(id, radius, autoReset, joystickSizeRatio = 0.5) {
         this._jsOuter = document.getElementById(id);
-        if (null == this._jsOuter) {
+        if (null === this._jsOuter) {
             console.log("[error]: Could not find joystick " + id);
             return;
         }
@@ -36,7 +36,7 @@ class Joystick {
         // Create inner part
         this._jsOuter.innerHTML = "<div id='" + id + "_inner'/>";
 
-        if (null == (this._jsInner = this._jsOuter.querySelector("#" + id + "_inner"))) {
+        if (null === (this._jsInner = this._jsOuter.querySelector("#" + id + "_inner"))) {
             console.log("[error]: Could not find " + id + "_inner");
         }
 
