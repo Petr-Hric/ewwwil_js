@@ -44,7 +44,7 @@ class Joystick {
         this._innerRadius = (this._radius * joystickSizeRatio);
 
         // Set inner part initial position
-        if ("fixed" == this._jsOuter.style.position) {
+        if ("fixed" === this._jsOuter.style.position) {
             this._x = this._centerX;
             this._y = this._centerY;
         } else {
@@ -90,7 +90,7 @@ class Joystick {
     }
 
     blockXAxis(block) {
-        if (typeof (block) != "boolean") {
+        if (typeof (block) !== "boolean") {
             console.log("[error]: Invalid argument type");
             return;
         }
@@ -98,7 +98,7 @@ class Joystick {
     }
 
     blockYAxis(block) {
-        if (typeof (block) != "boolean") {
+        if (typeof (block) !== "boolean") {
             console.log("[error]: Invalid argument type");
             return;
         }
@@ -106,7 +106,7 @@ class Joystick {
     }
 
     reset() {
-        if ("fixed" == this._jsOuter.style.position) {
+        if ("fixed" === this._jsOuter.style.position) {
             this._x = this._centerX;
             this._y = this._centerY;
         } else {
@@ -146,7 +146,7 @@ class Joystick {
                     this._distance = this._radius;
                 }
 
-                if ("fixed" == this._jsOuter.style.position) {
+                if ("fixed" === this._jsOuter.style.position) {
                     this._x = this._centerX + this._lastPosX;
                     this._y = this._centerY + this._lastPosY;
                 } else {
