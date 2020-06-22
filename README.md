@@ -11,7 +11,7 @@ You need to include these two .JS files into your project
 
 Example of joystick creation
 ```javascript
-    js_left = new Joystick('js_left', 50, true);
+    js_left = new Joystick('js_left' /* joystick base element id */, 50 /* joystick radius */, true /* auto-reset */);
     js_left.outer.style.backgroundColor = 'rgb(255, 0, 0)';
     js_left.inner.style.backgroundColor = 'rgb(0, 255, 0)';
 ```
