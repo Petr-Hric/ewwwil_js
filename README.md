@@ -1,4 +1,7 @@
 # ewwwil_js
+
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/29fb93f11f5c421d81fe594e2b8b4a50)](https://app.codacy.com/manual/Petr-Hric/ewwwil_js?utm_source=github.com&utm_medium=referral&utm_content=Petr-Hric/ewwwil_js&utm_campaign=Badge_Grade_Dashboard)
+
 JavaScript tools and widgets
 
 ## How to use joystick
