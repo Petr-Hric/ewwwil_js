@@ -14,8 +14,6 @@ class Joystick {
     _distance = 0;
     _blockXAxis = false;
     _blockYAxis = false;
-    _initialViewportSizeX;
-    _initialViewportSizeY;
 
     constructor(id, radius, autoReset, joystickSizeRatio = 0.5) {
         this._jsOuter = document.getElementById(id);
@@ -26,13 +24,14 @@ class Joystick {
 
         this._autoReset = autoReset;
         this._radius = radius;
-        this._centerX = this._jsOuter.offsetLeft + this._radius;
-        this._centerY = this._jsOuter.offsetTop + this._radius;
 
         // Outer part style
         this._jsOuter.style.width = (this._radius * 2) + 'px';
         this._jsOuter.style.height = (this._radius * 2) + 'px';
         this._jsOuter.style.borderRadius = '50%';
+
+        this._centerX = this._jsOuter.offsetLeft + this._jsOuter.offsetWidth / 2;
+        this._centerY = this._jsOuter.offsetTop + this._jsOuter.offsetHeight / 2;
 
         // Create inner part
         this._jsOuter.innerHTML = "<div id='" + id + "_inner'/>";
@@ -49,8 +48,8 @@ class Joystick {
             this._x = this._centerX;
             this._y = this._centerY;
         } else {
-            this._x = this._radius;
-            this._y = this._radius;
+            this._x = this._jsOuter.offsetWidth / 2;
+            this._y = this._jsOuter.offsetHeight / 2;
         }
 
         // Inner part style
@@ -111,8 +110,8 @@ class Joystick {
             this._x = this._centerX;
             this._y = this._centerY;
         } else {
-            this._x = this._radius;
-            this._y = this._radius;
+            this._x = this._jsOuter.offsetWidth / 2;
+            this._y = this._jsOuter.offsetHeight / 2;
         }
 
         this._distance = 0;
@@ -151,8 +150,8 @@ class Joystick {
                     this._x = this._centerX + this._lastPosX;
                     this._y = this._centerY + this._lastPosY;
                 } else {
-                    this._x = this._radius + this._lastPosX;
-                    this._y = this._radius + this._lastPosY;
+                    this._x = this._jsOuter.offsetWidth / 2 + this._lastPosX;
+                    this._y = this._jsOuter.offsetHeight / 2 + this._lastPosY;
                 }
 
                 this.updateUI();
