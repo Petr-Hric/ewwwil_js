@@ -1,0 +1,59 @@
+﻿<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8" />
+
+    <title>Test Web</title>
+
+    <script type="text/javascript" src="../ewwwil_js/utility/interaction/ewwwil_interaction_handler.js"></script>
+    <script type="text/javascript" src="../ewwwil_js/widgets/joystick/ewwwil_joystick.js"></script>
+
+    <script>
+
+        var loaded = false;
+
+        // Websocket
+
+        var websocket = new WebSocket("ws://127.0.0.1:32438");
+
+        websocket.onerror = function (event) {
+            console.log("[ws - error]: n/a");
+        };
+
+        // Interaction handler - begin
+
+        var interactionHandler = new InteractionHandler();
+
+        // Interaction handler - end
+
+        function onError() {
+            document.body.innerHTML = "<p><h1>Critical error</h1></p><p><h3></h3></p>";
+        }
+
+        var js_left = null;
+        var js_right = null;
+        var js_most_right = null;
+
+        function onBodyLoad() {
+            js_left = new Joystick('js_left', 50, true);
+            js_left.outer.style.backgroundColor = 'rgb(255, 0, 0)';
+            js_left.inner.style.backgroundColor = 'rgb(0, 255, 0)';
+
+            js_right = new Joystick('js_right', 50, false);
+            js_right.outer.style.backgroundColor = 'rgb(0, 255, 0)';
+            js_right.inner.style.backgroundColor = 'rgb(0, 0, 255)';
+
+            js_most_right = new Joystick('js_most_right', 50, true);
+            js_most_right.outer.style.backgroundColor = 'rgb(0, 0, 255)';
+            js_most_right.inner.style.backgroundColor = 'rgb(255, 0, 0)';
+        }
+
+    </script>
+</head>
+<body onload="onBodyLoad()">
+    <div id="js_left" style="position:absolute; top:100px; left:100px;"></div>
+    <div id="js_right" style="position:fixed; top:100px; left:200px;"></div>
+    <div id="js_most_right" style="position:fixed; top:100px; left:300px;"></div>
+    <button id="reset" onclick="js_right.reset()">RESET</button>
+</body>
+</html>
