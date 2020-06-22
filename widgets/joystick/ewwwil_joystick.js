@@ -17,7 +17,7 @@ class Joystick {
     _initialViewportSizeX;
     _initialViewportSizeY;
 
-    constructor(id, radius, autoReset, zindex = 1, joystickSizeRatio = 0.5) {
+    constructor(id, radius, autoReset, joystickSizeRatio = 0.5) {
         this._jsOuter = document.getElementById(id);
         if (null == this._jsOuter) {
             console.log('[error]: Could not find joystick ' + id);
