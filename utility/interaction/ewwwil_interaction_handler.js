@@ -21,30 +21,30 @@ class InteractionHandler {
         if (!this._debug) {
             return;
         }
-        console.log('[IH - debug] -> ' + message);
+        console.log("[IH - debug] -> " + message);
     }
 
     ERROR(message) {
-        console.log(new Error('[IH - error] -> ' + message));
+        console.log(new Error("[IH - error] -> " + message));
     }
 
     handleEvent(evt) {
-        this.DEBUG('[handleEvent]: ' + evt.type);
+        this.DEBUG("[handleEvent]: " + evt.type);
 
         switch (evt.type) {
-            case 'mousedown':
-            case 'touchstart':
+            case "mousedown":
+            case "touchstart":
                 this.handleStart(evt);
                 break;
-            case 'mouseup':
-            case 'touchend':
+            case "mouseup":
+            case "touchend":
                 this.handleEnd(evt);
                 break;
-            case 'mousemove':
-            case 'touchmove':
+            case "mousemove":
+            case "touchmove":
                 this.handleMove(evt);
                 break;
-            case 'touchcancel':
+            case "touchcancel":
                 this.handleCancel(evt);
                 break;
             default:
@@ -65,7 +65,7 @@ class InteractionHandler {
     }
 
     insertTouch(touchId, x, y, target) {
-        this.DEBUG('[insertTouch]: {target: ' + target.id + '}');
+        this.DEBUG("[insertTouch]: {target: " + target.id + "}");
 
         this._activeTouchList.push(
             {
@@ -89,13 +89,13 @@ class InteractionHandler {
     }
 
     removeTouch(touchId) {
-        this.DEBUG('[removeTouch]: {touch id: ' + touchId + '}');
+        this.DEBUG("[removeTouch]: {touch id: " + touchId + "}");
 
         var index = this.activeTouchIndex(touchId);
         if (index >= 0) {
             for (var o = 0; o < this._activeTouchList[index]._atObserverList.length; ++o) {
                 this._activeTouchList[index]._atObserverList[o].handleInteraction(
-                    'up', this._activeTouchList[index]);
+                    "up", this._activeTouchList[index]);
             }
 
             this._activeTouchList.splice(index, 1);
@@ -103,11 +103,11 @@ class InteractionHandler {
     }
 
     handleStart(evt) {
-        this.DEBUG('[handleStart]: ' + evt.type);
+        this.DEBUG("[handleStart]: " + evt.type);
 
         evt.preventDefault();
 
-        if ('mousedown' == evt.type) {
+        if ("mousedown" == evt.type) {
             this.insertTouch(99, evt.pageX, evt.pageY, evt.target);
         } else {
             for (var i = 0; i < evt.changedTouches.length; ++i) {
@@ -121,11 +121,11 @@ class InteractionHandler {
     }
 
     handleEnd(evt) {
-        this.DEBUG('[handleEnd]: ' + evt.type);
+        this.DEBUG("[handleEnd]: " + evt.type);
 
         evt.preventDefault();
 
-        if ('mouseup' == evt.type) {
+        if ("mouseup" == evt.type) {
             this.removeTouch(99);
         } else {
             for (var i = 0; i < evt.changedTouches.length; ++i) {
@@ -135,7 +135,7 @@ class InteractionHandler {
     }
 
     handleCancel(evt) {
-        this.DEBUG('[handleCancel]: ' + evt.type);
+        this.DEBUG("[handleCancel]: " + evt.type);
 
         this.handleEnd(evt);
     }
@@ -145,9 +145,9 @@ class InteractionHandler {
             return;
         }
 
-        this.DEBUG('[handleMove]: ' + evt.type);
+        this.DEBUG("[handleMove]: " + evt.type);
 
-        if (evt.type == 'mousemove') {
+        if (evt.type == "mousemove") {
             var index = this.activeTouchIndex(99);
             if (index >= 0) {
                 this._activeTouchList[index]._x = evt.pageX;
@@ -155,7 +155,7 @@ class InteractionHandler {
 
                 for (var o = 0; o < this._activeTouchList[index]._atObserverList.length; ++o) {
                     this._activeTouchList[index]._atObserverList[o].handleInteraction(
-                        'move', this._activeTouchList[index]);
+                        "move", this._activeTouchList[index]);
                 }
             }
         } else {
@@ -167,37 +167,37 @@ class InteractionHandler {
 
                     for (var o = 0; o < this._activeTouchList[index]._atObserverList.length; ++o) {
                         this._activeTouchList[index]._atObserverList[o].handleInteraction(
-                            'move', this._activeTouchList[index]);
+                            "move", this._activeTouchList[index]);
                     }
                 }
             }
         }
     }
 
-    registerObserver(target /* target element id */, observer /* observer's this pointer */) {
-        this.DEBUG('[registerObserver]: ' + target.id);
+    registerObserver(target /* target element id */, observer /* observer"s this pointer */) {
+        this.DEBUG("[registerObserver]: " + target.id);
 
         var index = this.observerIndex(target);
         if (-1 == index) {
             this._ihObserverList.push({ _id: target.id, _ihObserver: observer.getThis });
         } else {
-            this.ERROR('Observer already registered');
+            this.ERROR("Observer already registered");
         }
     }
 
     unRegisterObserver(target) {
-        this.DEBUG('[unRegisterObserver]: ' + target.id);
+        this.DEBUG("[unRegisterObserver]: " + target.id);
 
         var index = observerIndex(target);
         if (index >= 0) {
             this._ihObserverList.splice(index, 1);
         } else {
-            this.ERROR('Observer not registered');
+            this.ERROR("Observer not registered");
         }
     }
 
-    observerIndex(target /* observer's target element id */) {
-        this.DEBUG('[observerIndex]: ' + target.id);
+    observerIndex(target /* observer"s target element id */) {
+        this.DEBUG("[observerIndex]: " + target.id);
 
         for (var i = 0; i < this._ihObserverList.length; ++i) {
             if (this._ihObserverList[i]._id == target.id) {

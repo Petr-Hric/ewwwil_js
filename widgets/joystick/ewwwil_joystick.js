@@ -18,7 +18,7 @@ class Joystick {
     constructor(id, radius, autoReset, joystickSizeRatio = 0.5) {
         this._jsOuter = document.getElementById(id);
         if (null == this._jsOuter) {
-            console.log('[error]: Could not find joystick ' + id);
+            console.log("[error]: Could not find joystick " + id);
             return;
         }
 
@@ -26,9 +26,9 @@ class Joystick {
         this._radius = radius;
 
         // Outer part style
-        this._jsOuter.style.width = (this._radius * 2) + 'px';
-        this._jsOuter.style.height = (this._radius * 2) + 'px';
-        this._jsOuter.style.borderRadius = '50%';
+        this._jsOuter.style.width = (this._radius * 2) + "px";
+        this._jsOuter.style.height = (this._radius * 2) + "px";
+        this._jsOuter.style.borderRadius = "50%";
 
         this._centerX = this._jsOuter.offsetLeft + this._jsOuter.offsetWidth / 2;
         this._centerY = this._jsOuter.offsetTop + this._jsOuter.offsetHeight / 2;
@@ -36,15 +36,15 @@ class Joystick {
         // Create inner part
         this._jsOuter.innerHTML = "<div id='" + id + "_inner'/>";
 
-        if (null == (this._jsInner = this._jsOuter.querySelector('#' + id + '_inner'))) {
-            console.log('[error]: Could not find ' + id + '_inner');
+        if (null == (this._jsInner = this._jsOuter.querySelector("#" + id + "_inner"))) {
+            console.log("[error]: Could not find " + id + "_inner");
         }
 
         // Calc inner part radius
         this._innerRadius = (this._radius * joystickSizeRatio);
 
         // Set inner part initial position
-        if ('fixed' == this._jsOuter.style.position) {
+        if ("fixed" == this._jsOuter.style.position) {
             this._x = this._centerX;
             this._y = this._centerY;
         } else {
@@ -53,11 +53,11 @@ class Joystick {
         }
 
         // Inner part style
-        this._jsInner.style.width = (this._innerRadius * 2) + 'px';
-        this._jsInner.style.height = (this._innerRadius * 2) + 'px';
+        this._jsInner.style.width = (this._innerRadius * 2) + "px";
+        this._jsInner.style.height = (this._innerRadius * 2) + "px";
         this._jsInner.style.zindex = this._jsOuter.zindex + 1;
         this._jsInner.style.position = this._jsOuter.style.position;
-        this._jsInner.style.borderRadius = '50%';
+        this._jsInner.style.borderRadius = "50%";
 
         // Register for interaction callback
         interactionHandler.registerObserver(this._jsInner, this);
@@ -91,7 +91,7 @@ class Joystick {
 
     blockXAxis(block) {
         if (typeof (block) != "boolean") {
-            console.log('[error]: Invalid argument type');
+            console.log("[error]: Invalid argument type");
             return;
         }
         this._blockXAxis = block;
@@ -99,14 +99,14 @@ class Joystick {
 
     blockYAxis(block) {
         if (typeof (block) != "boolean") {
-            console.log('[error]: Invalid argument type');
+            console.log("[error]: Invalid argument type");
             return;
         }
         this._blockYAxis = block;
     }
 
     reset() {
-        if ('fixed' == this._jsOuter.style.position) {
+        if ("fixed" == this._jsOuter.style.position) {
             this._x = this._centerX;
             this._y = this._centerY;
         } else {
@@ -123,13 +123,13 @@ class Joystick {
     }
 
     updateUI() {
-        this._jsInner.style.left = (this._x - this._innerRadius) + 'px';
-        this._jsInner.style.top = (this._y - this._innerRadius) + 'px';
+        this._jsInner.style.left = (this._x - this._innerRadius) + "px";
+        this._jsInner.style.top = (this._y - this._innerRadius) + "px";
     }
 
     handleInteraction(type, interactionData) {
         switch (type) {
-            case 'move':
+            case "move":
                 if (!this._blockXAxis) {
                     this._lastPosX = this._offsetX + (interactionData._x - interactionData._startX);
                 }
@@ -146,7 +146,7 @@ class Joystick {
                     this._distance = this._radius;
                 }
 
-                if ('fixed' == this._jsOuter.style.position) {
+                if ("fixed" == this._jsOuter.style.position) {
                     this._x = this._centerX + this._lastPosX;
                     this._y = this._centerY + this._lastPosY;
                 } else {
@@ -157,7 +157,7 @@ class Joystick {
                 this.updateUI();
 
                 break;
-            case 'up':
+            case "up":
                 if (this._autoReset) {
                     this.reset();
                 } else {
