@@ -1,7 +1,6 @@
 /* Petr Hric - Ewwwil Copyright (c) 2020-20xx */
 
 class Joystick {
-    _positionProp = 'fixed';
     _autoReset;
     _radius;
     _centerX;
@@ -15,33 +14,30 @@ class Joystick {
     _distance = 0;
     _blockXAxis = false;
     _blockYAxis = false;
+    _initialViewportSizeX;
+    _initialViewportSizeY;
 
-    constructor(id, x, y, radius, autoReset, zindex = 1, joystickSizeRatio = 0.5) {
-        this._autoReset = autoReset;
-        this._radius = radius;
-        this._centerX = x + this._radius;
-        this._centerY = y + this._radius;
-
-        var jsOuter = document.getElementById(id);
-        if (null == jsOuter) {
+    constructor(id, radius, autoReset, zindex = 1, joystickSizeRatio = 0.5) {
+        this._jsOuter = document.getElementById(id);
+        if (null == this._jsOuter) {
             console.log('[error]: Could not find joystick ' + id);
             return;
         }
 
+        this._autoReset = autoReset;
+        this._radius = radius;
+        this._centerX = this._jsOuter.offsetLeft + this._radius;
+        this._centerY = this._jsOuter.offsetTop + this._radius;
+
         // Outer part style
-        jsOuter.style.width = (this._radius * 2) + 'px';
-        jsOuter.style.height = (this._radius * 2) + 'px';
-        jsOuter.style.zindex = zindex;
-        jsOuter.style.position = this._positionProp;
-        jsOuter.style.left = x + 'px';
-        jsOuter.style.top = y + 'px';
-        jsOuter.style.borderRadius = '50%';
-        jsOuter.style.backgroundColor = 'rgb(255, 0, 0)';
+        this._jsOuter.style.width = (this._radius * 2) + 'px';
+        this._jsOuter.style.height = (this._radius * 2) + 'px';
+        this._jsOuter.style.borderRadius = '50%';
 
         // Create inner part
-        jsOuter.innerHTML = "<div id='" + id + "_inner'/>";
+        this._jsOuter.innerHTML = "<div id='" + id + "_inner'/>";
 
-        if (null == (this._jsInner = jsOuter.querySelector('#' + id + '_inner'))) {
+        if (null == (this._jsInner = this._jsOuter.querySelector('#' + id + '_inner'))) {
             console.log('[error]: Could not find ' + id + '_inner');
         }
 
@@ -49,7 +45,7 @@ class Joystick {
         this._innerRadius = (this._radius * joystickSizeRatio);
 
         // Set inner part initial position
-        if ('fixed' == this._positionProp) {
+        if ('fixed' == this._jsOuter.style.position) {
             this._x = this._centerX;
             this._y = this._centerY;
         } else {
@@ -60,10 +56,9 @@ class Joystick {
         // Inner part style
         this._jsInner.style.width = (this._innerRadius * 2) + 'px';
         this._jsInner.style.height = (this._innerRadius * 2) + 'px';
-        this._jsInner.style.zindex = zindex + 1;
-        this._jsInner.style.position = this._positionProp;
+        this._jsInner.style.zindex = this._jsOuter.zindex + 1;
+        this._jsInner.style.position = this._jsOuter.style.position;
         this._jsInner.style.borderRadius = '50%';
-        this._jsInner.style.backgroundColor = 'rgb(0, 255, 0)';
 
         // Register for interaction callback
         interactionHandler.registerObserver(this._jsInner, this);
@@ -87,6 +82,14 @@ class Joystick {
         return this._lastPosY;
     }
 
+    get outer() {
+        return this._jsOuter;
+    }
+
+    get inner() {
+        return this._jsInner;
+    }
+
     blockXAxis(block) {
         if (typeof (block) != "boolean") {
             console.log('[error]: Invalid argument type');
@@ -104,7 +107,7 @@ class Joystick {
     }
 
     reset() {
-        if ('fixed' == this._positionProp) {
+        if ('fixed' == this._jsOuter.style.position) {
             this._x = this._centerX;
             this._y = this._centerY;
         } else {
@@ -144,7 +147,7 @@ class Joystick {
                     this._distance = this._radius;
                 }
 
-                if ('fixed' == this._positionProp) {
+                if ('fixed' == this._jsOuter.style.position) {
                     this._x = this._centerX + this._lastPosX;
                     this._y = this._centerY + this._lastPosY;
                 } else {
