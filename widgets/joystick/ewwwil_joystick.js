@@ -33,8 +33,7 @@ class Joystick {
         this._centerY = this._jsOuter.offsetTop + this._jsOuter.offsetHeight / 2;
 
         // Create inner part
-        var innerHTML = "<div id='" + id + "_inner'/>";
-        this._jsOuter.innerHTML = innerHTML;
+        this._jsOuter.innerHTML = this.sanitize("<div id='" + id + "_inner'/>");
 
         this._jsInner = this._jsOuter.querySelector("#" + id + "_inner");
         if (null === this._jsInner) {
@@ -165,5 +164,11 @@ class Joystick {
                 }
                 break;
         }
+    }
+
+    sanitize(string) {
+        var temp = document.createElement('div');
+        temp.textContent = string;
+        return temp.innerHTML;
     }
 }

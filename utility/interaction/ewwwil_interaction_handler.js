@@ -3,7 +3,6 @@
 class InteractionHandler {
     _activeTouchList = [];
     _ihObserverList = [];
-    _debug = false;
 
     constructor() {
         // Touch events
@@ -17,20 +16,11 @@ class InteractionHandler {
         document.addEventListener("mousemove", this, false);
     }
 
-    debug(message) {
-        if (!this._debug) {
-            return;
-        }
-        console.info("[IH - debug] -> " + message);
-    }
-
     error(message) {
         throw new Error("[IH - error] -> " + message);
     }
 
     handleEvent(evt) {
-        this.debug("[handleEvent]: " + evt.type);
-
         switch (evt.type) {
             case "mousedown":
             case "touchstart":
@@ -53,8 +43,6 @@ class InteractionHandler {
     }
 
     observerIndex(target /* observer"s target element id */) {
-        this.debug("[observerIndex]: " + target.id);
-
         for (var i = 0; i < this._ihObserverList.length; ++i) {
             if (this._ihObserverList[parseInt(i, 10)]._id === target.id) {
                 return i;
@@ -76,8 +64,6 @@ class InteractionHandler {
     }
 
     insertTouch(touchId, x, y, target) {
-        this.debug("[insertTouch]: {target: " + target.id + "}");
-
         this._activeTouchList.push(
             {
                 _touchId: touchId
@@ -100,8 +86,6 @@ class InteractionHandler {
     }
 
     removeTouch(touchId) {
-        this.debug("[removeTouch]: {touch id: " + touchId + "}");
-
         var o;
         var length;
 
@@ -118,8 +102,6 @@ class InteractionHandler {
     }
 
     handleStart(evt) {
-        this.debug("[handleStart]: " + evt.type);
-
         var i;
 
         evt.preventDefault();
@@ -138,8 +120,6 @@ class InteractionHandler {
     }
 
     handleEnd(evt) {
-        this.debug("[handleEnd]: " + evt.type);
-
         var i;
 
         evt.preventDefault();
@@ -154,8 +134,6 @@ class InteractionHandler {
     }
 
     handleCancel(evt) {
-        this.debug("[handleCancel]: " + evt.type);
-
         this.handleEnd(evt);
     }
 
@@ -166,8 +144,6 @@ class InteractionHandler {
         if (this._activeTouchList.length === 0) {
             return;
         }
-
-        this.debug("[handleMove]: " + evt.type);
 
         if (evt.type === "mousemove") {
             index = this.activeTouchIndex(99);
@@ -187,7 +163,7 @@ class InteractionHandler {
                     this._activeTouchList[parseInt(index, 10)]._x = evt.changedTouches[parseInt(index, 10)].pageXOffset;
                     this._activeTouchList[parseInt(index, 10)]._y = evt.changedTouches[parseInt(index, 10)].pageYOffset;
 
-                    for (o = 0; o < this._activeTouchList[index]._atObserverList.length; ++o) {
+                    for (o = 0; o < this._activeTouchList[parseInt(index, 10)]._atObserverList.length; ++o) {
                         this._activeTouchList[parseInt(index, 10)]._atObserverList[parseInt(o, 10)].handleInteraction(
                             "move", this._activeTouchList[parseInt(index, 10)]);
                     }
@@ -197,8 +173,6 @@ class InteractionHandler {
     }
 
     registerObserver(target /* target element id */, observer /* observer"s this pointer */) {
-        this.debug("[registerObserver]: " + target.id);
-
         var index = this.observerIndex(target);
         if (-1 === parseInt(index, 10)) {
             this._ihObserverList.push({ _id: target.id, _ihObserver: observer.getThis });
@@ -208,8 +182,6 @@ class InteractionHandler {
     }
 
     unRegisterObserver(target) {
-        this.debug("[unRegisterObserver]: " + target.id);
-
         var index = this.observerIndex(target);
         if (parseInt(index, 10) >= 0) {
             this._ihObserverList.splice(parseInt(index, 10), 1);
