@@ -10,6 +10,62 @@ class InteractionHandler {
         throw new Error("[IH - error] -> " + message);
     }
 
+    observerIndex(target /* observer's target element id */) {
+        for (let i = 0; i < this._ihObserverList.length; ++i) {
+            if (this._ihObserverList[parseInt(i, 10)]._id === target.id) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    activeTouchIndex(touchId) {
+        for (let i = 0; i < this._activeTouchList.length; ++i) {
+            if (this._activeTouchList[parseInt(i, 10)]._touchId === touchId) {
+                return i;
+            }
+        }
+
+        this.error("Could not find touch " + touchId);
+
+        return -1;
+    }
+
+    insertTouch(touchId, x, y, target) {
+        this._activeTouchList.push(
+            {
+                _touchId: touchId
+                , _startX: x
+                , _startY: y
+                , _x: x
+                , _y: y
+                , _target: target
+                , _atObserverList: []
+            }
+        );
+
+        for (let o = 0; o < this._ihObserverList.length; ++o) {
+            if (this._ihObserverList[parseInt(o, 10)]._id
+                === this._activeTouchList[this._activeTouchList.length - 1]._target.id) {
+                this._activeTouchList[this._activeTouchList.length - 1]._atObserverList.push(
+                    this._ihObserverList[parseInt(o, 10)]._ihObserver.getThis);
+            }
+        }
+    }
+
+    removeTouch(touchId) {
+        const index = this.activeTouchIndex(touchId);
+        if (parseInt(index, 10) >= 0) {
+            const length = this._activeTouchList[parseInt(index, 10)]._atObserverList.length;
+            for (let o = 0; o < length; ++o) {
+                this._activeTouchList[parseInt(index, 10)]._atObserverList[parseInt(o, 10)].handleInteraction(
+                    "up", this._activeTouchList[parseInt(index, 10)]);
+            }
+
+            this._activeTouchList.splice(parseInt(index, 10), 1);
+        }
+    }
+
     handleEvent(evt) {
         if (0 === this._ihObserverList.length) {
             return;
@@ -86,62 +142,6 @@ class InteractionHandler {
                 break;
             default:
                 break;
-        }
-    }
-
-    observerIndex(target /* observer's target element id */) {
-        for (let i = 0; i < this._ihObserverList.length; ++i) {
-            if (this._ihObserverList[parseInt(i, 10)]._id === target.id) {
-                return i;
-            }
-        }
-        return -1;
-    }
-
-    activeTouchIndex(touchId) {
-        for (let i = 0; i < this._activeTouchList.length; ++i) {
-            if (this._activeTouchList[parseInt(i, 10)]._touchId === touchId) {
-                return i;
-            }
-        }
-
-        this.error("Could not find touch " + touchId);
-
-        return -1;
-    }
-
-    insertTouch(touchId, x, y, target) {
-        this._activeTouchList.push(
-            {
-                _touchId: touchId
-                , _startX: x
-                , _startY: y
-                , _x: x
-                , _y: y
-                , _target: target
-                , _atObserverList: []
-            }
-        );
-
-        for (let o = 0; o < this._ihObserverList.length; ++o) {
-            if (this._ihObserverList[parseInt(o, 10)]._id
-                === this._activeTouchList[this._activeTouchList.length - 1]._target.id) {
-                this._activeTouchList[this._activeTouchList.length - 1]._atObserverList.push(
-                    this._ihObserverList[parseInt(o, 10)]._ihObserver.getThis);
-            }
-        }
-    }
-
-    removeTouch(touchId) {
-        const index = this.activeTouchIndex(touchId);
-        if (parseInt(index, 10) >= 0) {
-            const length = this._activeTouchList[parseInt(index, 10)]._atObserverList.length;
-            for (let o = 0; o < length; ++o) {
-                this._activeTouchList[parseInt(index, 10)]._atObserverList[parseInt(o, 10)].handleInteraction(
-                    "up", this._activeTouchList[parseInt(index, 10)]);
-            }
-
-            this._activeTouchList.splice(parseInt(index, 10), 1);
         }
     }
 
