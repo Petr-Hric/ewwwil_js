@@ -142,14 +142,14 @@ class InteractionHandler {
             }
 
             // Touch events
-            element.addEventListener("touchstart", this, { passive: false });
-            element.addEventListener("touchend", this, { passive: false });
-            element.addEventListener("touchcancel", this, { passive: false });
-            element.addEventListener("touchmove", this, { passive: false });
+            element.addEventListener("touchstart", this, { passive: true });
+            element.addEventListener("touchend", this, { passive: true });
+            element.addEventListener("touchcancel", this, { passive: true });
+            element.addEventListener("touchmove", this, { passive: true });
             // Mouse events
-            element.addEventListener("mousedown", this, { passive: false });
-            element.addEventListener("mouseup", this, { passive: false });
-            element.addEventListener("mousemove", this, { passive: false });
+            element.addEventListener("mousedown", this, { passive: true });
+            element.addEventListener("mouseup", this, { passive: true });
+            element.addEventListener("mousemove", this, { passive: true });
 
             this._ihObserverList.push({ _id: target.id, _ihObserver: observer.getThis });
         } else {
