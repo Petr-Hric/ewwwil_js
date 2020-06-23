@@ -56,7 +56,7 @@ class InteractionHandler {
         this.debug("[observerIndex]: " + target.id);
 
         for (var i = 0; i < this._ihObserverList.length; ++i) {
-            if (this._ihObserverList[parseInt(i)]._id === target.id) {
+            if (this._ihObserverList[parseInt(i, 10)]._id === target.id) {
                 return i;
             }
         }
@@ -65,7 +65,7 @@ class InteractionHandler {
 
     activeTouchIndex(touchId) {
         for (var i = 0; i < this._activeTouchList.length; ++i) {
-            if (this._activeTouchList[i]._touchId === touchId) {
+            if (this._activeTouchList[parseInt(i, 10)]._touchId === touchId) {
                 return i;
             }
         }
@@ -91,7 +91,7 @@ class InteractionHandler {
         );
 
         for (var o = 0; o < this._ihObserverList.length; ++o) {
-            if (this._ihObserverList[o]._id
+            if (this._ihObserverList[parseInt(o, 10)]._id
                 === this._activeTouchList[this._activeTouchList.length - 1]._target.id) {
                 this._activeTouchList[this._activeTouchList.length - 1]._atObserverList.push(
                     this._ihObserverList[parseInt(o, 10)]._ihObserver.getThis);
@@ -103,11 +103,13 @@ class InteractionHandler {
         this.debug("[removeTouch]: {touch id: " + touchId + "}");
 
         var o;
+        var length;
 
         var index = this.activeTouchIndex(touchId);
         if (index >= 0) {
-            for (o = 0; o < this._activeTouchList[index]._atObserverList.length; ++o) {
-                this._activeTouchList[parseInt(index, 10)]._atObserverList[o].handleInteraction(
+            length = this._activeTouchList[parseInt(index, 10)]._atObserverList.length;
+            for (o = 0; o < length; ++o) {
+                this._activeTouchList[parseInt(index, 10)]._atObserverList[parseInt(o, 10)].handleInteraction(
                     "up", this._activeTouchList[parseInt(index, 10)]);
             }
 
@@ -180,7 +182,7 @@ class InteractionHandler {
             }
         } else {
             for (i = 0; i < evt.changedTouches.length; ++i) {
-                index = this.activeTouchIndex(evt.changedTouches[i].identifier);
+                index = this.activeTouchIndex(evt.changedTouches[parseInt(i, 10)].identifier);
                 if (index >= 0) {
                     this._activeTouchList[parseInt(index, 10)]._x = evt.changedTouches[parseInt(index, 10)].pageXOffset;
                     this._activeTouchList[parseInt(index, 10)]._y = evt.changedTouches[parseInt(index, 10)].pageYOffset;
@@ -208,7 +210,7 @@ class InteractionHandler {
     unRegisterObserver(target) {
         this.debug("[unRegisterObserver]: " + target.id);
 
-        var index = observerIndex(target);
+        var index = this.observerIndex(target);
         if (index >= 0) {
             this._ihObserverList.splice(index, 1);
         } else {
