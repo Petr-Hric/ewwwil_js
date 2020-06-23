@@ -4,11 +4,11 @@ class InteractionHandler {
     _activeTouchList = [];
     _ihObserverList = [];
 
-    constructor() { }
-
     error(message) {
-        throw new Error("[IH - error] -> " + message);
+        throw new Error("[IH - error]: " + message);
     }
+
+    constructor() { }
 
     observerIndex(target /* observer's target element id */) {
         for (let i = 0; i < this._ihObserverList.length; ++i) {
