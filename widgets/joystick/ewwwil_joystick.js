@@ -126,8 +126,6 @@ class Joystick {
     }
 
     handleInteraction(type, interactionData) {
-        console.log("[handleInteraction]: " + type);
-
         switch (type) {
             case "move":
                 if (!this._blockXAxis) {
@@ -140,7 +138,7 @@ class Joystick {
 
                 this._distance = Math.sqrt(this._lastPosX * this._lastPosX + this._lastPosY * this._lastPosY);
                 if (this._distance > this._radius) {
-                    var ratio = this._radius / this._distance;
+                    const ratio = this._radius / this._distance;
                     this._lastPosX *= ratio;
                     this._lastPosY *= ratio;
                     this._distance = this._radius;
