@@ -17,9 +17,13 @@ class InteractionHandler {
 
         switch (evt.type) {
             case "mousedown":
+                evt.preventDefault();
+
                 this.insertTouch(99, evt.pageX, evt.pageY, evt.target);
                 break;
             case "touchstart":
+                evt.preventDefault();
+
                 for (let i = 0; i < evt.changedTouches.length; ++i) {
                     this.insertTouch(
                         evt.changedTouches[parseInt(i, 10)].identifier
@@ -29,9 +33,13 @@ class InteractionHandler {
                 }
                 break;
             case "mouseup":
+                evt.preventDefault();
+
                 this.removeTouch(99);
                 break;
             case "mousemove": {
+                evt.preventDefault();
+
                 if (0 === this._activeTouchList.length) {
                     break;
                 }
@@ -49,6 +57,8 @@ class InteractionHandler {
             }
                 break;
             case "touchmove":
+                evt.preventDefault();
+
                 if (0 === this._activeTouchList.length) {
                     break;
                 }
@@ -68,6 +78,8 @@ class InteractionHandler {
                 break;
             case "touchend":
             case "touchcancel":
+                evt.preventDefault();
+
                 for (let i = 0; i < evt.changedTouches.length; ++i) {
                     this.removeTouch(evt.changedTouches[parseInt(i, 10)].identifier);
                 }
@@ -142,14 +154,14 @@ class InteractionHandler {
             }
 
             // Touch events
-            element.addEventListener("touchstart", this, { passive: true });
-            element.addEventListener("touchend", this, { passive: true });
-            element.addEventListener("touchcancel", this, { passive: true });
-            element.addEventListener("touchmove", this, { passive: true });
+            element.addEventListener("touchstart", this);
+            element.addEventListener("touchend", this);
+            element.addEventListener("touchcancel", this);
+            element.addEventListener("touchmove", this);
             // Mouse events
-            element.addEventListener("mousedown", this, { passive: true });
-            element.addEventListener("mouseup", this, { passive: true });
-            element.addEventListener("mousemove", this, { passive: true });
+            element.addEventListener("mousedown", this);
+            element.addEventListener("mouseup", this);
+            element.addEventListener("mousemove", this);
 
             this._ihObserverList.push({ _id: target.id, _ihObserver: observer.getThis });
         } else {
