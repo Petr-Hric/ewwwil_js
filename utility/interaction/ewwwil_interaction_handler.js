@@ -6,14 +6,14 @@ class InteractionHandler {
 
     constructor() {
         // Touch events
-        document.addEventListener("touchstart", this, false);
-        document.addEventListener("touchend", this, false);
-        document.addEventListener("touchcancel", this, false);
-        document.addEventListener("touchmove", this, false);
+        document.addEventListener("touchstart", this, { passive: false });
+        document.addEventListener("touchend", this, { passive: false });
+        document.addEventListener("touchcancel", this, { passive: false });
+        document.addEventListener("touchmove", this, { passive: false });
         // Mouse events
-        document.addEventListener("mousedown", this, false);
-        document.addEventListener("mouseup", this, false);
-        document.addEventListener("mousemove", this, false);
+        document.addEventListener("mousedown", this, { passive: false });
+        document.addEventListener("mouseup", this, { passive: false });
+        document.addEventListener("mousemove", this, { passive: false });
     }
 
     error(message) {
@@ -21,6 +21,10 @@ class InteractionHandler {
     }
 
     handleEvent(evt) {
+        if (0 == this._ihObserverList.length) {
+            return;
+        }
+
         switch (evt.type) {
             case "mousedown":
             case "touchstart":
@@ -42,7 +46,7 @@ class InteractionHandler {
         }
     }
 
-    observerIndex(target /* observer"s target element id */) {
+    observerIndex(target /* observer's target element id */) {
         for (var i = 0; i < this._ihObserverList.length; ++i) {
             if (this._ihObserverList[parseInt(i, 10)]._id === target.id) {
                 return i;
@@ -108,14 +112,16 @@ class InteractionHandler {
 
         if ("mousedown" === evt.type) {
             this.insertTouch(99, evt.pageX, evt.pageY, evt.target);
-        } else {
+        } else if ("touchstart" === evt.type) {
             for (i = 0; i < evt.changedTouches.length; ++i) {
                 this.insertTouch(
                     evt.changedTouches[parseInt(i, 10)].identifier
-                    , evt.changedTouches[parseInt(i, 10)].pageXOffset
-                    , evt.changedTouches[parseInt(i, 10)].pageYOffset
+                    , evt.changedTouches[parseInt(i, 10)].pageX
+                    , evt.changedTouches[parseInt(i, 10)].pageY
                     , evt.changedTouches[parseInt(i, 10)].target);
             }
+        } else {
+            this.error("Unexpected event type");
         }
     }
 
@@ -126,10 +132,12 @@ class InteractionHandler {
 
         if ("mouseup" === evt.type) {
             this.removeTouch(99);
-        } else {
+        } else if ("touchend" === evt.type || "touchcancel" === evt.type) {
             for (i = 0; i < evt.changedTouches.length; ++i) {
                 this.removeTouch(evt.changedTouches[parseInt(i, 10)].identifier);
             }
+        } else {
+            this.error("Unexpected event type");
         }
     }
 
@@ -156,12 +164,12 @@ class InteractionHandler {
                         "move", this._activeTouchList[parseInt(index, 10)]);
                 }
             }
-        } else {
+        } else if (evt.type === "touchmove") {
             for (i = 0; i < evt.changedTouches.length; ++i) {
                 index = this.activeTouchIndex(evt.changedTouches[parseInt(i, 10)].identifier);
                 if (parseInt(index, 10) >= 0) {
-                    this._activeTouchList[parseInt(index, 10)]._x = evt.changedTouches[parseInt(index, 10)].pageXOffset;
-                    this._activeTouchList[parseInt(index, 10)]._y = evt.changedTouches[parseInt(index, 10)].pageYOffset;
+                    this._activeTouchList[parseInt(index, 10)]._x = evt.changedTouches[parseInt(index, 10)].pageX;
+                    this._activeTouchList[parseInt(index, 10)]._y = evt.changedTouches[parseInt(index, 10)].pageY;
 
                     for (o = 0; o < this._activeTouchList[parseInt(index, 10)]._atObserverList.length; ++o) {
                         this._activeTouchList[parseInt(index, 10)]._atObserverList[parseInt(o, 10)].handleInteraction(
@@ -169,10 +177,12 @@ class InteractionHandler {
                     }
                 }
             }
+        } else {
+            this.error("Unexpected event type");
         }
     }
 
-    registerObserver(target /* target element id */, observer /* observer"s this pointer */) {
+    registerObserver(target /* target element id */, observer /* observer's this pointer */) {
         var index = this.observerIndex(target);
         if (-1 === parseInt(index, 10)) {
             this._ihObserverList.push({ _id: target.id, _ihObserver: observer.getThis });

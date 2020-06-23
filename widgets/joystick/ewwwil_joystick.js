@@ -126,6 +126,8 @@ class Joystick {
     }
 
     handleInteraction(type, interactionData) {
+        console.log("[handleInteraction]: " + type);
+
         switch (type) {
             case "move":
                 if (!this._blockXAxis) {
