@@ -14,12 +14,15 @@ You need to include these two .JS files into your project
 
 Example of joystick creation
 ```javascript
-    js_left = new Joystick('js_left' /* joystick base element id */, 50 /* joystick radius */, true /* auto-reset */);
-    js_left.outer.style.backgroundColor = 'rgb(255, 0, 0)';
-    js_left.inner.style.backgroundColor = 'rgb(0, 255, 0)';
+    var interactionHandler = new InteractionHandler();
+
+    // Joystick(/* base element id */, /* base element radius */, /* auto-reset */, /* joystick size ratio (optional) */)
+    joystick = new Joystick(interactionHandler, 'joystick_div', 50, true);
+    joystick.outer.style.backgroundColor = 'rgb(255, 0, 0)';
+    joystick.inner.style.backgroundColor = 'rgb(0, 255, 0)';
 ```
 
 Also you need to create HTML element which will be used as joystick base
 ```html
-    <div id="js_left" style="position:absolute; top:100px; left:100px;"></div>
+    <div id="joystick_div" style="position:absolute; top:100px; left:100px;"></div>
 ```
