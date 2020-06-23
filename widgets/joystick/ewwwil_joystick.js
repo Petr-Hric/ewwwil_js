@@ -33,9 +33,10 @@ class Joystick {
         this._centerY = this._jsOuter.offsetTop + this._jsOuter.offsetHeight / 2;
 
         // Create inner part
-        this._jsOuter.innerHTML = "<div id='" + id + "_inner'/>";
+        var innerHTML = "<div id='" + id + "_inner'/>";
+        this._jsOuter.innerHTML = innerHTML;
 
-        this._jsInner = this._jsOuter.querySelector("#" + id + "_inner")
+        this._jsInner = this._jsOuter.querySelector("#" + id + "_inner");
         if (null === this._jsInner) {
             throw new Error("[error]: Could not find " + id + "_inner");
         }
@@ -92,7 +93,6 @@ class Joystick {
     blockXAxis(block) {
         if (typeof (block) !== "boolean") {
             throw new Error("[error]: Invalid argument type");
-            return;
         }
         this._blockXAxis = block;
     }
@@ -100,7 +100,6 @@ class Joystick {
     blockYAxis(block) {
         if (typeof (block) !== "boolean") {
             throw new Error("[error]: Invalid argument type");
-            return;
         }
         this._blockYAxis = block;
     }
