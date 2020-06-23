@@ -21,11 +21,11 @@ class InteractionHandler {
         if (!this._debug) {
             return;
         }
-        console.log("[IH - debug] -> " + message);
+        Console.log("[IH - debug] -> " + message);
     }
 
     error(message) {
-        console.log(new Error("[IH - error] -> " + message));
+        throw new Error("[IH - error] -> " + message);
     }
 
     handleEvent(evt) {
@@ -50,6 +50,17 @@ class InteractionHandler {
             default:
                 break;
         }
+    }
+
+    observerIndex(target /* observer"s target element id */) {
+        this.debug("[observerIndex]: " + target.id);
+
+        for (var i = 0; i < this._ihObserverList.length; ++i) {
+            if (this._ihObserverList[parseInt(i)]._id === target.id) {
+                return i;
+            }
+        }
+        return -1;
     }
 
     activeTouchIndex(touchId) {
@@ -83,7 +94,7 @@ class InteractionHandler {
             if (this._ihObserverList[o]._id
                 === this._activeTouchList[this._activeTouchList.length - 1]._target.id) {
                 this._activeTouchList[this._activeTouchList.length - 1]._atObserverList.push(
-                    this._ihObserverList[o]._ihObserver.getThis);
+                    this._ihObserverList[parseInt(o)]._ihObserver.getThis);
             }
         }
     }
@@ -116,10 +127,10 @@ class InteractionHandler {
         } else {
             for (i = 0; i < evt.changedTouches.length; ++i) {
                 this.insertTouch(
-                    evt.changedTouches[i].identifier
-                    , evt.changedTouches[i].pageXOffset
-                    , evt.changedTouches[i].pageYOffset
-                    , evt.changedTouches[i].target);
+                    evt.changedTouches[parseInt(i)].identifier
+                    , evt.changedTouches[parseInt(i)].pageXOffset
+                    , evt.changedTouches[parseInt(i)].pageYOffset
+                    , evt.changedTouches[parseInt(i)].target);
             }
         }
     }
@@ -135,7 +146,7 @@ class InteractionHandler {
             this.removeTouch(99);
         } else {
             for (i = 0; i < evt.changedTouches.length; ++i) {
-                this.removeTouch(evt.changedTouches[i].identifier);
+                this.removeTouch(evt.changedTouches[parseInt(i)].identifier);
             }
         }
     }
@@ -159,24 +170,24 @@ class InteractionHandler {
         if (evt.type === "mousemove") {
             index = this.activeTouchIndex(99);
             if (index >= 0) {
-                this._activeTouchList[index]._x = evt.pageX;
-                this._activeTouchList[index]._y = evt.pageY;
+                this._activeTouchList[parseInt(index)]._x = evt.pageX;
+                this._activeTouchList[parseInt(index)]._y = evt.pageY;
 
                 for (o = 0; o < this._activeTouchList[index]._atObserverList.length; ++o) {
-                    this._activeTouchList[index]._atObserverList[o].handleInteraction(
-                        "move", this._activeTouchList[index]);
+                    this._activeTouchList[parseInt(index)]._atObserverList[parseInt(o)].handleInteraction(
+                        "move", this._activeTouchList[parseInt(index)]);
                 }
             }
         } else {
             for (i = 0; i < evt.changedTouches.length; ++i) {
                 index = this.activeTouchIndex(evt.changedTouches[i].identifier);
                 if (index >= 0) {
-                    this._activeTouchList[index]._x = evt.changedTouches[i].pageXOffset;
-                    this._activeTouchList[index]._y = evt.changedTouches[i].pageYOffset;
+                    this._activeTouchList[parseInt(index)]._x = evt.changedTouches[parseInt(index)].pageXOffset;
+                    this._activeTouchList[parseInt(index)]._y = evt.changedTouches[parseInt(index)].pageYOffset;
 
                     for (o = 0; o < this._activeTouchList[index]._atObserverList.length; ++o) {
-                        this._activeTouchList[index]._atObserverList[o].handleInteraction(
-                            "move", this._activeTouchList[index]);
+                        this._activeTouchList[parseInt(index)]._atObserverList[parseInt(o)].handleInteraction(
+                            "move", this._activeTouchList[parseInt(index)]);
                     }
                 }
             }
@@ -204,15 +215,4 @@ class InteractionHandler {
             this.error("Observer not registered");
         }
     }
-
-    observerIndex(target /* observer"s target element id */) {
-        this.debug("[observerIndex]: " + target.id);
-
-        for (var i = 0; i < this._ihObserverList.length; ++i) {
-            if (this._ihObserverList[i]._id === target.id) {
-                return i;
-            }
-        }
-        return -1;
-    }
-};
+}

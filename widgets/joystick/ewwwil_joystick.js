@@ -18,7 +18,7 @@ class Joystick {
     constructor(id, radius, autoReset, joystickSizeRatio = 0.5) {
         this._jsOuter = document.getElementById(id);
         if (null === this._jsOuter) {
-            console.error("[error]: Could not find joystick " + id);
+            throw new Error("[error]: Could not find joystick " + id);
             return;
         }
 
@@ -37,7 +37,7 @@ class Joystick {
         this._jsOuter.innerHTML = "<div id='" + id + "_inner'/>";
 
         if (null === (this._jsInner = this._jsOuter.querySelector("#" + id + "_inner"))) {
-            console.error("[error]: Could not find " + id + "_inner");
+            throw new Error("[error]: Could not find " + id + "_inner");
         }
 
         // Calc inner part radius
@@ -91,7 +91,7 @@ class Joystick {
 
     blockXAxis(block) {
         if (typeof (block) !== "boolean") {
-            console.error("[error]: Invalid argument type");
+            throw new Error("[error]: Invalid argument type");
             return;
         }
         this._blockXAxis = block;
@@ -99,7 +99,7 @@ class Joystick {
 
     blockYAxis(block) {
         if (typeof (block) !== "boolean") {
-            console.error("[error]: Invalid argument type");
+            throw new Error("[error]: Invalid argument type");
             return;
         }
         this._blockYAxis = block;
@@ -167,4 +167,4 @@ class Joystick {
                 break;
         }
     }
-};
+}
