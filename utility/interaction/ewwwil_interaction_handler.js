@@ -94,7 +94,7 @@ class InteractionHandler {
             if (this._ihObserverList[o]._id
                 === this._activeTouchList[this._activeTouchList.length - 1]._target.id) {
                 this._activeTouchList[this._activeTouchList.length - 1]._atObserverList.push(
-                    this._ihObserverList[parseInt(o)]._ihObserver.getThis);
+                    this._ihObserverList[parseInt(o, 10)]._ihObserver.getThis);
             }
         }
     }
@@ -107,8 +107,8 @@ class InteractionHandler {
         var index = this.activeTouchIndex(touchId);
         if (index >= 0) {
             for (o = 0; o < this._activeTouchList[index]._atObserverList.length; ++o) {
-                this._activeTouchList[parseInt(index)]._atObserverList[o].handleInteraction(
-                    "up", this._activeTouchList[parseInt(index)]);
+                this._activeTouchList[parseInt(index, 10)]._atObserverList[o].handleInteraction(
+                    "up", this._activeTouchList[parseInt(index, 10)]);
             }
 
             this._activeTouchList.splice(index, 1);
@@ -127,10 +127,10 @@ class InteractionHandler {
         } else {
             for (i = 0; i < evt.changedTouches.length; ++i) {
                 this.insertTouch(
-                    evt.changedTouches[parseInt(i)].identifier
-                    , evt.changedTouches[parseInt(i)].pageXOffset
-                    , evt.changedTouches[parseInt(i)].pageYOffset
-                    , evt.changedTouches[parseInt(i)].target);
+                    evt.changedTouches[parseInt(i, 10)].identifier
+                    , evt.changedTouches[parseInt(i, 10)].pageXOffset
+                    , evt.changedTouches[parseInt(i, 10)].pageYOffset
+                    , evt.changedTouches[parseInt(i, 10)].target);
             }
         }
     }
@@ -146,7 +146,7 @@ class InteractionHandler {
             this.removeTouch(99);
         } else {
             for (i = 0; i < evt.changedTouches.length; ++i) {
-                this.removeTouch(evt.changedTouches[parseInt(i)].identifier);
+                this.removeTouch(evt.changedTouches[parseInt(i, 10)].identifier);
             }
         }
     }
@@ -170,24 +170,24 @@ class InteractionHandler {
         if (evt.type === "mousemove") {
             index = this.activeTouchIndex(99);
             if (index >= 0) {
-                this._activeTouchList[parseInt(index)]._x = evt.pageX;
-                this._activeTouchList[parseInt(index)]._y = evt.pageY;
+                this._activeTouchList[parseInt(index, 10)]._x = evt.pageX;
+                this._activeTouchList[parseInt(index, 10)]._y = evt.pageY;
 
                 for (o = 0; o < this._activeTouchList[index]._atObserverList.length; ++o) {
-                    this._activeTouchList[parseInt(index)]._atObserverList[parseInt(o)].handleInteraction(
-                        "move", this._activeTouchList[parseInt(index)]);
+                    this._activeTouchList[parseInt(index, 10)]._atObserverList[parseInt(o, 10)].handleInteraction(
+                        "move", this._activeTouchList[parseInt(index, 10)]);
                 }
             }
         } else {
             for (i = 0; i < evt.changedTouches.length; ++i) {
                 index = this.activeTouchIndex(evt.changedTouches[i].identifier);
                 if (index >= 0) {
-                    this._activeTouchList[parseInt(index)]._x = evt.changedTouches[parseInt(index)].pageXOffset;
-                    this._activeTouchList[parseInt(index)]._y = evt.changedTouches[parseInt(index)].pageYOffset;
+                    this._activeTouchList[parseInt(index, 10)]._x = evt.changedTouches[parseInt(index, 10)].pageXOffset;
+                    this._activeTouchList[parseInt(index, 10)]._y = evt.changedTouches[parseInt(index, 10)].pageYOffset;
 
                     for (o = 0; o < this._activeTouchList[index]._atObserverList.length; ++o) {
-                        this._activeTouchList[parseInt(index)]._atObserverList[parseInt(o)].handleInteraction(
-                            "move", this._activeTouchList[parseInt(index)]);
+                        this._activeTouchList[parseInt(index, 10)]._atObserverList[parseInt(o, 10)].handleInteraction(
+                            "move", this._activeTouchList[parseInt(index, 10)]);
                     }
                 }
             }
