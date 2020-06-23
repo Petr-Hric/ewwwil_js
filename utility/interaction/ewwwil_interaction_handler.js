@@ -4,17 +4,7 @@ class InteractionHandler {
     _activeTouchList = [];
     _ihObserverList = [];
 
-    constructor() {
-        // Touch events
-        // document.addEventListener("touchstart", this, { passive: false });
-        // document.addEventListener("touchend", this, { passive: false });
-        // document.addEventListener("touchcancel", this, { passive: false });
-        // document.addEventListener("touchmove", this, { passive: false });
-        // // Mouse events
-        // document.addEventListener("mousedown", this, { passive: false });
-        // document.addEventListener("mouseup", this, { passive: false });
-        // document.addEventListener("mousemove", this, { passive: false });
-    }
+    constructor() { }
 
     error(message) {
         throw new Error("[IH - error] -> " + message);
@@ -40,9 +30,6 @@ class InteractionHandler {
                 break;
             case "mouseup":
                 this.removeTouch(99);
-                break;
-            case "touchend":
-                this.handleTouchEnd(evt);
                 break;
             case "mousemove": {
                 if (0 === this._activeTouchList.length) {
@@ -79,8 +66,11 @@ class InteractionHandler {
                     }
                 }
                 break;
+            case "touchend":
             case "touchcancel":
-                this.handleTouchEnd(evt);
+                for (let i = 0; i < evt.changedTouches.length; ++i) {
+                    this.removeTouch(evt.changedTouches[parseInt(i, 10)].identifier);
+                }
                 break;
             default:
                 break;
@@ -106,12 +96,6 @@ class InteractionHandler {
         this.error("Could not find touch " + touchId);
 
         return -1;
-    }
-
-    handleTouchEnd(evt) {
-        for (let i = 0; i < evt.changedTouches.length; ++i) {
-            this.removeTouch(evt.changedTouches[parseInt(i, 10)].identifier);
-        }
     }
 
     insertTouch(touchId, x, y, target) {
