@@ -8,7 +8,15 @@ class InteractionHandler {
         throw new Error("[IH - error]: " + message);
     }
 
-    constructor() { }
+    constructor() {
+        // Touch events:
+        document.addEventListener("touchmove", this);
+        document.addEventListener("touchend", this);
+        document.addEventListener("touchcancel", this);
+        // Mouse events:
+        document.addEventListener("mousemove", this);
+        document.addEventListener("mouseup", this);
+    }
 
     observerIndex(target /* observer's target element id */) {
         for (let i = 0; i < this._ihObserverList.length; ++i) {
@@ -155,13 +163,8 @@ class InteractionHandler {
 
             // Touch events
             element.addEventListener("touchstart", this);
-            element.addEventListener("touchend", this);
-            element.addEventListener("touchcancel", this);
-            element.addEventListener("touchmove", this);
             // Mouse events
             element.addEventListener("mousedown", this);
-            element.addEventListener("mouseup", this);
-            element.addEventListener("mousemove", this);
 
             this._ihObserverList.push({ _id: target.id, _ihObserver: observer.getThis });
         } else {
@@ -177,15 +180,10 @@ class InteractionHandler {
                 this.error("Could not find observer's target element");
             }
 
-            // Touch events
+            // Touch events:
             element.removeEventListener("touchstart", this);
-            element.removeEventListener("touchend", this);
-            element.removeEventListener("touchcancel", this);
-            element.removeEventListener("touchmove", this);
-            // Mouse events
+            // Mouse events:
             element.removeEventListener("mousedown", this);
-            element.removeEventListener("mouseup", this);
-            element.removeEventListener("mousemove", this);
 
             this._ihObserverList.splice(parseInt(index, 10), 1);
         } else {
