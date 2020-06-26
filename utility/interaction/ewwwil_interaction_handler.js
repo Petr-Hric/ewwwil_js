@@ -105,7 +105,7 @@ class InteractionHandler {
             case "mousedown":
                 evt.preventDefault();
                 for (let o = 0; o < this._ihObserverList.length; ++o) {
-                    if (this._ihObserverList[o]._target == evt.target.id) {
+                    if (this._ihObserverList[parseInt(o, 10)]._target === evt.target.id) {
                         this.insertTouch(99, evt.pageX, evt.pageY, evt.target);
                         break;
                     }
