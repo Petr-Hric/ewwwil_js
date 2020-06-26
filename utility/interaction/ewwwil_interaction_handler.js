@@ -1,5 +1,27 @@
 /* Petr Hric - Ewwwil Copyright (c) 2020-20xx */
 
+class IHObserver {
+    constructor(id, ihObserver) {
+        this._id = id;
+        this._ihObserver = ihObserver;
+    }
+
+    _id;
+    _ihObserver;
+}
+
+class IHActiveTouch {
+    constructor() {}
+
+    _touchId;
+    _startX;
+    _startY;
+    _x;
+    _y;
+    _target;
+    _atObserverList;
+}
+
 class InteractionHandler {
     _activeTouchList = [];
     _ihObserverList = [];
@@ -82,8 +104,12 @@ class InteractionHandler {
         switch (evt.type) {
             case "mousedown":
                 evt.preventDefault();
-
-                this.insertTouch(99, evt.pageX, evt.pageY, evt.target);
+                for (let o = 0; o < this._ihObserverList.length; ++o) {
+                    if (this._ihObserverList[o]._target == evt.target.id) {
+                        this.insertTouch(99, evt.pageX, evt.pageY, evt.target);
+                        break;
+                    }
+                }
                 break;
             case "touchstart":
                 evt.preventDefault();
@@ -130,8 +156,8 @@ class InteractionHandler {
                 for (let i = 0; i < evt.changedTouches.length; ++i) {
                     const index = this.activeTouchIndex(evt.changedTouches[parseInt(i, 10)].identifier);
                     if (parseInt(index, 10) >= 0) {
-                        this._activeTouchList[parseInt(index, 10)]._x = evt.changedTouches[parseInt(index, 10)].pageX;
-                        this._activeTouchList[parseInt(index, 10)]._y = evt.changedTouches[parseInt(index, 10)].pageY;
+                        this._activeTouchList[parseInt(index, 10)]._x = evt.changedTouches[parseInt(i, 10)].pageX;
+                        this._activeTouchList[parseInt(index, 10)]._y = evt.changedTouches[parseInt(i, 10)].pageY;
 
                         for (let o = 0; o < this._activeTouchList[parseInt(index, 10)]._atObserverList.length; ++o) {
                             this._activeTouchList[parseInt(index, 10)]._atObserverList[parseInt(o, 10)].handleInteraction(
