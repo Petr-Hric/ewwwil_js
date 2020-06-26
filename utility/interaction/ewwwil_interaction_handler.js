@@ -1,27 +1,5 @@
 /* Petr Hric - Ewwwil Copyright (c) 2020-20xx */
 
-class IHObserver {
-    constructor(id, ihObserver) {
-        this._id = id;
-        this._ihObserver = ihObserver;
-    }
-
-    _id;
-    _ihObserver;
-}
-
-class IHActiveTouch {
-    constructor() {}
-
-    _touchId;
-    _startX;
-    _startY;
-    _x;
-    _y;
-    _target;
-    _atObserverList;
-}
-
 class InteractionHandler {
     _activeTouchList = [];
     _ihObserverList = [];
